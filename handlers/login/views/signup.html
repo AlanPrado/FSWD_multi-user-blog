@@ -1,0 +1,48 @@
+{% extends "login_base.html" %}
+
+{% block content %}
+
+<header class="row">
+  <h1 class="col-md-offset-5">Sign up</h1>
+</header>
+
+<div class="row container-fluid">
+  <form method="post" class="col-md-offset-5 col-md-3">
+    <div class="form-group" >
+      <label>
+        Username
+        <input type="text" name="username" value="{{username}}" class="form-control">
+      </label>
+      <span class="error">{{user_error}}</span>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Password
+        <input type="password" name="password" value="" class="form-control">
+      </label>
+      <span class="error">{{password_error}}</span>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Verify Password
+        <input type="password" name="verify" value="" class="form-control">
+        <span class="error">{{verify_error}}</span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Email (optional)
+        <input type="text" name="email" value="{{email}}" class="form-control">
+        <span class="error">{{email_error}}</span>
+      </label>
+    </div>
+
+    <a class="btn btn-primary" href="/blog/signin" role="button">Existing account?</a>
+    <button type="submit" class="btn btn-default">Sign up</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "login_base.html" %}
+
+{% block content %}
+
+  <header class="row">
+    <h1 class="col-md-offset-5">Login</h1>
+  </header>
+
+  <div class="form-horizontal">
+    <form method="post" class="col-md-offset-5 col-md-3">
+      <div class="form-group" >
+        <label>
+          Username
+          <input type="text" name="username" value="{{username}}" class="form-control">
+        </label>
+        <span class="error">{{user_error}}</span>
+      </div>
+
+      <div class="form-group">
+        <label>
+          Password
+          <input type="password" name="password" value="" class="form-control">
+        </label>
+        <span class="error">{{password_error}}</span>
+      </div>
+
+      <a class="btn btn-primary" href="/blog/signup" role="button">New account?</a>
+      <button type="submit" class="btn btn-default">Login</button>
+    </form>
+  </div>
+
+{% endblock %}

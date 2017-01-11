@@ -1,0 +1,15 @@
+.error {
+  color: red;
+  display: block;
+}
+
+.action-panel {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-panel > * {
+  margin: 0;
+  padding-left: 15px;
+}

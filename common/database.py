@@ -32,6 +32,7 @@ class User(db.Model):
 
 class Post(db.Model):
     subject = db.StringProperty(required = True)
+    author = db.ReferenceProperty(User)
     content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
@@ -46,8 +47,9 @@ class Post(db.Model):
         return cls.get_by_id(pid)
 
     @classmethod
-    def register(cls, subject = subject, content = content):
+    def register(cls, subject = subject, content = content, author = author):
         post = cls(subject = subject,
-                   content = content)
+                   content = content,
+                   author = author)
         post.put()
         return post

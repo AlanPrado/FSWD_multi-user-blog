@@ -18,3 +18,11 @@
 .action-panel .greeting {
   flex-grow: 1;
 }
+
+.post-detail {
+  display: flex;
+}
+
+.post-detail .subject {
+  flex-grow: 1;
+}

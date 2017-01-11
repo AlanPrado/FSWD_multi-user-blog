@@ -21,7 +21,7 @@ class NewPostHandler(BlogHandler):
 			content = self.request.POST['content']
 
 			if subject and content:
-				post = Post.register(subject = subject, content = content)
+				post = Post.register(subject = subject, content = content, author = self.user)
 				post_url = "/blog/%s" % post.key().id()
 				self.redirect(post_url, permanent = True)
 			else:

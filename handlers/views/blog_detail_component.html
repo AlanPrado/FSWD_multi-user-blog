@@ -1,8 +1,13 @@
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <a href="/blog/{{post.key().id()}}">
-      <span class="subject ">{{post.subject}}</span>
-    </a>
+  <div class="panel-heading post-detail">
+    <div class="subject">
+      <a href="/blog/{{post.key().id()}}">
+        {{post.subject}}
+      </a>
+    </div>
+    <div class="post-date">
+      {{post.author.name}} - {{post.created.strftime("%b %d, %Y")}}
+    </div>
   </div>
   <div  class="panel-body">
     <div class="content">{{post.content.replace('\n', '<br>') | safe}}</div>

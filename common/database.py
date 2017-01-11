@@ -38,7 +38,8 @@ class Post(db.Model):
 
     @classmethod
     def get_most_recent(cls):
-        return db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
+         #return db.GqlQuery("SELECT * FROM %s ORDER BY created DESC LIMIT 10" % cls.__name__)
+         return cls.all().order("-created").run(limit = 10)
 
     @classmethod
     def by_id(cls, pid):

@@ -3,7 +3,7 @@
 Multi User Blog demo site.
 
 ## Copyright and license
-Code and documentation copyright 2016-2016 Code released under the [MIT License](https://github.com/AlanPrado/multi-user-blog/blob/master/LICENSE)
+Code and documentation copyright 2016-2017 Code released under the [MIT License](https://github.com/AlanPrado/multi-user-blog/blob/master/LICENSE)
 
 ## Authors
 

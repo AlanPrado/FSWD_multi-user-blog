@@ -2,16 +2,10 @@
 
 {% block content %}
 
-{% for post in posts %}
+  {% for post in posts %}
 
-<div class="post">
-    <a href="/blog/{{post.key().id()}}">
-      <div class="subject">{{post.subject}}</div>
-    </a>
-    <pre class="content">{{post.content}}</pre>
-</div>
-<hr>
+    {% include 'blog_detail_component.html' %}
 
-{% endfor %}
+  {% endfor %}
 
 {% endblock %}

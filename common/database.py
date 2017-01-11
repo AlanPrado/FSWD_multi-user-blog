@@ -40,6 +40,13 @@ class Post(db.Model):
     def get_most_recent(cls):
         return db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
 
-    def render(self):
-        self._render_text = self.content.replace('\n', '<br>')
-        return render_str("post.html", p = self)
+    @classmethod
+    def by_id(cls, pid):
+        return cls.get_by_id(pid)
+
+    @classmethod
+    def register(cls, subject = subject, content = content):
+        post = cls(subject = subject,
+                   content = content)
+        post.put()
+        return post

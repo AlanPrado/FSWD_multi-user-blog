@@ -12,4 +12,9 @@
 .action-panel > * {
   margin: 0;
   padding-left: 15px;
+  margin: 0 5px;
+}
+
+.action-panel .greeting {
+  flex-grow: 1;
 }

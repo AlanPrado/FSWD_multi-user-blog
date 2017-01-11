@@ -1,7 +1,7 @@
 import re
 
 from common.request import BlogHandler
-from database import User
+from common.database import User
 
 class SignIn(BlogHandler):
 	def render_signin(self, user=None, user_error = "", password_error = ""):

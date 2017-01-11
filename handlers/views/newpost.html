@@ -1,24 +1,29 @@
 {% extends "blog_base.html" %}
 
 {% block content %}
-<form method="post">
-  <label>
-    <span>Subject</span><br>
-    <input type="text" name="subject" value="{{title}}">
-  </label>
 
-  <br>
+  <div class="form-horizontal">
+    <form method="post" class="col-md-offset-3">
+      <div class="form-group">
+        <label>
+          <span>Subject</span><br>
+          <input type="text" name="subject" value="{{subject}}" class="form-control">
+        </label>
+      </div>
 
-  <label>
-    <span>Content</span><br>
-    <textarea name="content" rows="8" cols="80">{{body}}</textarea>
-  </label>
+      <br>
 
-  <div class="error">
-    {{error}}
+      <div class="form-group">
+        <label>
+          <span>Content</span><br>
+          <textarea name="content" rows="8" cols="80" class="form-control">{{content}}</textarea>
+        </label>
+      </div>
+
+      <div class="error">{{error}}</div>
+
+      <button type="submit" class="btn btn-default">Save</button>
+    </form>
   </div>
-
-  <input type="submit">
-</form>
 
 {% endblock %}

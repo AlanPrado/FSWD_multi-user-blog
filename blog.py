@@ -9,16 +9,19 @@ config.jinja_env = config.set_templates([
 ])
 
 from common.request import BlogHandler
-from handlers.home import WelcomeHandler
+from handlers.home import WelcomeHandler, NewPostHandler, PostHandler
 from handlers.login.login import SignIn, SignUp, SignOut
 
+BlogHandler.login_page = '/blog/signup'
+
 routes = [
-	('/blog/signup', SignUp),
+	(BlogHandler.login_page, SignUp),
 	('/blog/signin', SignIn),
 	('/blog/logout', SignOut),
 	(r'/blog/?', WelcomeHandler),
-    #webapp2.Route('/blog/newpost', BlogPostPage, name='newpost'),
-    #webapp2.Route('/blog/<blog_id:\d+>', BlogGetPage, name='blog_id'),
+    (r'/?', WelcomeHandler),
+    webapp2.Route('/blog/newpost', NewPostHandler, name='newpost'),
+    webapp2.Route('/blog/<blog_id:\d+>', PostHandler, name='blog_id'),
 ]
 
 app = webapp2.WSGIApplication(routes, debug=True)

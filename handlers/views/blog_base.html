@@ -8,22 +8,24 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <header class="text-center jumbotron row">
         <h1><a href="/blog">CS 253 Blog!</a></h1>
       </header>
-
-      <hr>
-
+    </div>
+    <div class="container">
       <section class="action-panel row">
-        <h2>Welcome, {{username}}!</h2>
-        <a href="/blog/newpost">New Post</a>
-        <a href="/blog/logout">Logout</a>
+        {% if username %}
+          <h2 class="greeting">Welcome, {{username}}!</h2>
+        {% endif %}
+        <a class="btn btn-primary" role="button" href="/blog">Home</a>
+        <a class="btn btn-primary" role="button" href="/blog/newpost">New Post</a>
+        <a class="btn btn-primary" role="button" href="/blog/logout">Logout</a>
       </section>
 
       <hr>
 
-      <main class="row">
+      <main class="row container">
         {% block content %}
         {% endblock %}
       </main>

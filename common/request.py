@@ -2,9 +2,11 @@ import webapp2
 import secure
 from config import jinja_env
 
-from database import User
+from common.database import User
 
 class BlogHandler(webapp2.RequestHandler):
+	login_page = "login"
+
 	def write(self, *a, **kw):
 		self.response.write(*a, **kw)
 
@@ -42,11 +44,8 @@ class BlogHandler(webapp2.RequestHandler):
 		uid = self.read_secure_cookie('user_id')
 		self.user = uid and User.by_id(int(uid))
 
-class AuthenticatedHandler(BlogHandler):
-	def initialize(self, *a, **kw):
-		webapp2.RequestHandler.initialize(self, *a, **kw)
-		uid = self.read_secure_cookie('user_id')
-		if uid:
-			self.user = uid and User.by_id(int(uid))
+	def is_user_authenticated(self):
+		if self.user:
+			return True
 		else:
-			self.redirect('/blog/signup')
+			self.redirect(self.login_page, permanent = True)

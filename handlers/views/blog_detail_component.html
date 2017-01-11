@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="/blog/{{post.key().id()}}">
+      <span class="subject ">{{post.subject}}</span>
+    </a>
+  </div>
+  <div  class="panel-body">
+    <div class="content">{{post.content.replace('\n', '<br>') | safe}}</div>
+  </div>
+</div>

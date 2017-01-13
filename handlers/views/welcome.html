@@ -1,7 +1,12 @@
 {% extends "blog_base.html" %}
 
 {% block content %}
-
+  <div class="row">
+    <div class="col-md-offset-11">
+      <a class="btn btn-primary text-right" href="/blog/newpost" role="button">New Post</a>
+    </div>
+  </div>
+  <br>
   {% for post in posts %}
 
     {% include 'blog_detail_component.html' %}

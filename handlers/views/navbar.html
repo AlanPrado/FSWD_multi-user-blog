@@ -1,0 +1,12 @@
+<ul class="breadcrumb action-panel">
+  {% for p in page.get_page_stack() %}
+    {% if loop.last %}
+      <a href="{{p.url}}" class="active">{{p.label}}</a>
+    {% else %}
+      <a href="{{p.url}}">{{p.label}}</a>
+      <span>\</span>
+    {% endif %}
+  {% endfor %}
+  <h3 class="greeting">Welcome, {{page.user.name}}!</h3>
+  <a href="/blog/logout">Logout</a>
+</ul>

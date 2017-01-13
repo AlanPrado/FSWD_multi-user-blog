@@ -11,11 +11,12 @@
 
 .action-panel > * {
   margin: 0;
-  padding-left: 15px;
-  margin: 0 5px;
+  margin-right: 15px;
+  text-align: center;
 }
 
 .action-panel .greeting {
+  text-align: right;
   flex-grow: 1;
 }
 

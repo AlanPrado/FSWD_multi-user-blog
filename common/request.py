@@ -4,6 +4,11 @@ from config import jinja_env
 
 from common.database import User
 
+class Page(object):
+	def __init__(self, label, url):
+		self.label = label
+		self.url = url
+
 class BlogHandler(webapp2.RequestHandler):
 	login_page = "login"
 
@@ -43,6 +48,9 @@ class BlogHandler(webapp2.RequestHandler):
 		webapp2.RequestHandler.initialize(self, *a, **kw)
 		uid = self.read_secure_cookie('user_id')
 		self.user = uid and User.by_id(int(uid))
+
+	def get_page_stack(self):
+		return [Page(label = 'Home', url = '/')]
 
 	def is_user_authenticated(self):
 		if self.user:

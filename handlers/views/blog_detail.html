@@ -3,12 +3,13 @@
 {% block content %}
 
   <div class="detail">
-    <div class="text-right">
-      <a class="btn btn-primary" href="/blog/edit/{{page.post_id}}" role="button">Edit</a>
-      <a class="btn btn-primary" role="button" data-toggle="modal" data-target="#delete-post">Delete</a>
-    </div>
-
-    <br>
+    {% if page.is_owner(post) %}
+      <div class="text-right">
+        <a class="btn btn-primary" href="/blog/edit/{{page.post_id}}" role="button">Edit</a>
+        <a class="btn btn-primary" role="button" data-toggle="modal" data-target="#delete-post">Delete</a>
+      </div>
+      <br>
+    {% endif %}
     {% include 'blog_detail_component.html' %}
   </div>
   {% include 'delete_modal.html' %}

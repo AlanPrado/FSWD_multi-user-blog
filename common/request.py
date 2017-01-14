@@ -1,8 +1,17 @@
 import webapp2
-import secure
-from config import jinja_env
-
+import os
+import sys
+from jinja2 import Environment, FileSystemLoader
+from common import secure
+from config import config
 from common.database import User
+
+def load_templates(path, template_dir):
+    files = []
+    for t in template_dir:
+        files.append(os.path.join(os.path.dirname(path), t))
+
+    return Environment(loader = FileSystemLoader(files), autoescape = True)
 
 class Page(object):
 	def __init__(self, label, url):
@@ -16,7 +25,7 @@ class BlogHandler(webapp2.RequestHandler):
 		self.response.write(*a, **kw)
 
 	def render_str(self, template, **params):
-		t = jinja_env.get_template(template)
+		t = config.jinja_env.get_template(template)
 		return t.render(params)
 
 	def render(self, template, **kw):

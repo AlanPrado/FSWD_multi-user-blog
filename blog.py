@@ -1,17 +1,11 @@
 import webapp2
-import os
-import sys
-import config
-
-config.jinja_env = config.set_templates([
-    os.path.join(os.path.dirname(__file__), 'handlers/login/views'),
-    os.path.join(os.path.dirname(__file__), 'handlers/views'),
-])
-
-from common.request import BlogHandler
+from config import config
+from common.request import BlogHandler, load_templates
 from handlers.home import WelcomeHandler, NewPostHandler, PostHandler, EditPostHandler
 from handlers.login.login import SignIn, SignUp, SignOut
 
+template_dir = ['handlers/login/views', 'handlers/views']
+config.jinja_env = load_templates(__file__, template_dir)
 BlogHandler.login_page = '/blog/signup'
 
 routes = [

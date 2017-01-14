@@ -2,7 +2,7 @@ import random
 import string
 import hmac
 import hashlib
-from config import SECRET
+from config import config
 
 def make_salt():
     return ''.join(random.choice(string.letters) for x in xrange(5))
@@ -23,7 +23,7 @@ def valid_pw(name, pw, h):
     return False
 
 def hash_str(s):
-    return hmac.new(SECRET , s).hexdigest()
+    return hmac.new(config.SECRET , s).hexdigest()
 
 def make_secure_val(s):
     return "%s|%s" % (s, hash_str(s))

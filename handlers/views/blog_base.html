@@ -15,13 +15,12 @@
     </div>
 
     <div class="container">
+      {% include 'navbar.html' %}
+      <hr>
       <div class="hide alert" role="alert" id="alert">
         <button type="button" class="close" aria-label="Close" onclick="$('#alert').hide()"><span aria-hidden="true">&times;</span></button>
         <strong class="status"></strong> <span class="message"></span>
       </div>
-
-      {% include 'navbar.html' %}
-      <hr>
 
       <main>
         {% block content %}

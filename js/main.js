@@ -2,7 +2,7 @@ $("#delete-post").on("submit", "form", function (ev) {
     ev.preventDefault();
     var modal = $(this);
     var $btn = modal.find("button").button('loading');
-    var blog_id = modal.find("input[name=blog_id]").val();
+    var post_id = modal.find("input[name=post_id]").val();
     function showMessage(alertClass, message) {
       $("#alert").removeClass(["alert-success", "alert-danger"])
                  .find(".message").text(message).end()
@@ -11,7 +11,7 @@ $("#delete-post").on("submit", "form", function (ev) {
     }
 
     $.ajax({
-      url: '/blog/' + blog_id,
+      url: '/blog/' + post_id,
       type: 'DELETE',
       success: function (response) {
         var data = JSON.parse(response);

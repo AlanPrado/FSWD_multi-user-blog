@@ -21,7 +21,7 @@ routes = [
 	(r'/blog/?', WelcomeHandler),
     (r'/?', WelcomeHandler),
     webapp2.Route('/blog/newpost', NewPostHandler, name='newpost'),
-    webapp2.Route('/blog/<blog_id:\d+>', PostHandler, name='blog_id')
+    webapp2.Route('/blog/<post_id:\d+>', PostHandler, name='post_id')
 ]
 
 app = webapp2.WSGIApplication(routes, debug=True)

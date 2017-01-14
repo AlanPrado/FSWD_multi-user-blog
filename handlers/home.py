@@ -40,22 +40,27 @@ class NewPostHandler(WelcomeHandler):
 class PostHandler(WelcomeHandler):
 	def get_page_stack(self):
 		pages = super(PostHandler, self).get_page_stack()
-		pages.append(Page(label = 'Post detail', url = '/blog/%s' % self.blog_id))
+		pages.append(Page(label = 'Post detail', url = '/blog/%s' % self.post_id))
 		return pages
 
-	def get(self, blog_id):
+	def get(self, post_id):
 		if self.is_user_authenticated():
-			self.blog_id = blog_id
-			post = Post.by_id(int(blog_id))
-			self.render('blog_detail.html', page = self, post = post)
+			self.post_id = post_id
+			post = Post.by_id(int(post_id))
+			if not post:
+				self.redirect("/blog", permanent = True)
+			else:
+				self.render('blog_detail.html', page = self, post = post)
 
-	def delete(self, blog_id):
+	def delete(self, post_id):
 		if self.is_user_authenticated():
-			post = Post.by_id(int(blog_id))
+			post = Post.by_id(int(post_id))
 
-			if post and post.author.key().id() == self.user.key().id():
-				message = 'Post removed!'
-				self.write(json.dumps({"message": message}))
+			if post:
+				self.write(json.dumps({"message": "Post already removed!"}))
+			elif post.author.key().id() == self.user.key().id():
+				post.delete()
+				self.write(json.dumps({"message": "Post removed!"}))
 			else:
 				self.response.set_status(401)
-				self.write("User is not allowed to perform this operation.")
+				self.write("Remove other people posts is not allowed.")

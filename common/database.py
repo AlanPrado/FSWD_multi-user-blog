@@ -47,9 +47,15 @@ class Post(db.Model):
         return cls.get_by_id(pid)
 
     @classmethod
-    def register(cls, subject = subject, content = content, author = author):
+    def register(cls, subject, content, author):
         post = cls(subject = subject,
                    content = content,
                    author = author)
         post.put()
         return post
+
+    def update(self, subject, content):
+        self.subject = subject
+        self.content = content
+        self.put()
+        return self

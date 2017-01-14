@@ -13,7 +13,13 @@
         <h1><a href="/blog">CS 253 Blog!</a></h1>
       </header>
     </div>
+
     <div class="container">
+      <div class="hide alert" role="alert" id="alert">
+        <button type="button" class="close" aria-label="Close" onclick="$('#alert').hide()"><span aria-hidden="true">&times;</span></button>
+        <strong class="status"></strong> <span class="message"></span>
+      </div>
+
       {% include 'navbar.html' %}
       <hr>
 
@@ -25,5 +31,6 @@
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" charset="utf-8"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
+    <script src="/js/main.js" charset="utf-8"></script>
   </body>
 </html>

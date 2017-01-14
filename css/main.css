@@ -27,3 +27,7 @@
 .post-detail .subject {
   flex-grow: 1;
 }
+
+.hide {
+  display: none;
+}

@@ -1,5 +1,6 @@
 from common.database import Post
 from common.request import BlogHandler, Page
+import json
 
 class WelcomeHandler(BlogHandler):
 	def get_page_stack(self):
@@ -12,7 +13,7 @@ class WelcomeHandler(BlogHandler):
 
 class NewPostHandler(WelcomeHandler):
 	def get_page_stack(self):
-		pages = super(self).get_page_stack()
+		pages = super(NewPostHandler, self).get_page_stack()
 		pages.append(Page(label = 'New Post', url = '/blog/newpost'))
 		return pages
 
@@ -34,7 +35,7 @@ class NewPostHandler(WelcomeHandler):
 				self.redirect(post_url, permanent = True)
 			else:
 				error = 'subject and content, please!'
-				self.render_blog(error, subject = subject, content = content);
+				self.render_blog(error = error, subject = subject, content = content);
 
 class PostHandler(WelcomeHandler):
 	def get_page_stack(self):
@@ -47,3 +48,14 @@ class PostHandler(WelcomeHandler):
 			self.blog_id = blog_id
 			post = Post.by_id(int(blog_id))
 			self.render('blog_detail.html', page = self, post = post)
+
+	def delete(self, blog_id):
+		if self.is_user_authenticated():
+			post = Post.by_id(int(blog_id))
+
+			if post and post.author.key().id() == self.user.key().id():
+				message = 'Post removed!'
+				self.write(json.dumps({"message": message}))
+			else:
+				self.response.set_status(401)
+				self.write("User is not allowed to perform this operation.")

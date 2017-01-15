@@ -7,7 +7,7 @@
       {{post.author.name}} - {{post.created.strftime("%b %d, %Y")}}
     </div>
     <hr>
-    <button type="button" class="btn like" data-url="/blog/{{post.key().id()}}/like">
+    <button type="button" class="btn like {{ 'active' if post.user_liked(page.user.key()) }}" data-url="/blog/{{post.key().id()}}/like">
       <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
     </button>
   </div>

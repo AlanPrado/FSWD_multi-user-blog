@@ -2,8 +2,8 @@ from common import secure
 from google.appengine.ext import db
 
 class User(db.Model):
-    name = db.StringProperty(required = True)
-    pw_hash = db.StringProperty(required = True)
+    name = db.StringProperty(required=True)
+    pw_hash = db.StringProperty(required=True)
     email = db.StringProperty()
 
     @classmethod
@@ -16,11 +16,11 @@ class User(db.Model):
         return u
 
     @classmethod
-    def register(cls, name, pw, email = None):
+    def register(cls, name, pw, email=None):
         pw_hash = secure.make_pw_hash(name, pw)
-        user = cls(name = name,
-                    pw_hash = pw_hash,
-                    email = email)
+        user = cls(name=name,
+                   pw_hash=pw_hash,
+                   email=email)
         user.put()
         return user
 
@@ -31,16 +31,16 @@ class User(db.Model):
             return u
 
 class Post(db.Model):
-    subject = db.StringProperty(required = True)
+    subject = db.StringProperty(required=True)
     author = db.ReferenceProperty(User)
-    content = db.TextProperty(required = True)
-    created = db.DateTimeProperty(auto_now_add = True)
-    last_modified = db.DateTimeProperty(auto_now = True)
+    content = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
+    last_modified = db.DateTimeProperty(auto_now=True)
 
     @classmethod
     def get_most_recent(cls):
-         #return db.GqlQuery("SELECT * FROM %s ORDER BY created DESC LIMIT 10" % cls.__name__)
-         return cls.all().order("-created").run(limit = 10)
+        #return db.GqlQuery("SELECT * FROM %s ORDER BY created DESC LIMIT 10" % cls.__name__)
+        return cls.all().order("-created").run(limit=10)
 
     @classmethod
     def by_id(cls, pid):
@@ -48,9 +48,9 @@ class Post(db.Model):
 
     @classmethod
     def register(cls, subject, content, author):
-        post = cls(subject = subject,
-                   content = content,
-                   author = author)
+        post = cls(subject=subject,
+                   content=content,
+                   author=author)
         post.put()
         return post
 

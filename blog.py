@@ -1,7 +1,7 @@
 import webapp2
 from config import config
 from common.request import BlogHandler, load_templates
-from handlers.home import WelcomeHandler, NewPostHandler, PostHandler, EditPostHandler
+from handlers.home import WelcomeHandler, NewPostHandler, PostHandler, EditPostHandler, LikeHandler
 from handlers.login.login import SignIn, SignUp, SignOut
 
 template_dir = ['handlers/login/views', 'handlers/views']
@@ -15,6 +15,7 @@ routes = [
 	(r'/blog/?', WelcomeHandler),
     (r'/?', WelcomeHandler),
     ('/blog/newpost', NewPostHandler),
+	webapp2.Route(r'/blog/<post_id:\d+>/like', LikeHandler, name='post_id'),
     webapp2.Route(r'/blog/<post_id:\d+>', PostHandler, name='post_id'),
     webapp2.Route(r'/blog/edit/<post_id:\d+>', EditPostHandler, name='post_id')
 ]

@@ -15,19 +15,17 @@
     </div>
 
     <div class="container">
-      {% include 'navbar.html' %}
-      <hr>
-      <div class="hide alert" role="alert" id="alert">
-        <button type="button" class="close" aria-label="Close" onclick="$('#alert').hide()"><span aria-hidden="true">&times;</span></button>
-        <strong class="status"></strong> <span class="message"></span>
+      <div class="row">
+        {% include 'navbar.html' %}
+        <hr>
       </div>
-
-      <main>
+      <main class="row">
         {% block content %}
         {% endblock %}
       </main>
     </div>
 
+    {% include 'notification.html' %}
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" charset="utf-8"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="/js/main.js" charset="utf-8"></script>

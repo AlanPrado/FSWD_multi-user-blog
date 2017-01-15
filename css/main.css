@@ -20,14 +20,33 @@
   flex-grow: 1;
 }
 
-.post-detail {
+.post-detail .panel-heading {
   display: flex;
+  align-items: center;
+}
+
+.post-detail .panel-heading > *:not(:first-child) {
+  margin-left: 5px;
 }
 
 .post-detail .subject {
   flex-grow: 1;
 }
 
-.hide {
-  display: none;
+.like {
+  background-color: white;
+  border: lightblue solid 1px;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+
+.like:focus {
+  border-radius: 50%;
+  outline: 0 !important;
+}
+
+.like.active {
+  background-color: #33bb7c;
+  color: white;
 }

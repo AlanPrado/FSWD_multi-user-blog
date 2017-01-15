@@ -108,3 +108,18 @@ class PostHandler(WelcomeHandler):
             else:
                 post.delete()
                 self.write(json.dumps({"message": "Post removed!"}))
+
+class LikeHandler(WelcomeHandler):
+    def post(self, post_id):
+        if self.is_user_authenticated():
+            post = Post.by_id(int(post_id))
+
+            if not post:
+                self.response.set_status(401)
+                self.write("Post not found.")
+            elif self.is_owner(post):
+                self.response.set_status(401)
+                self.write("You can't like your own post.")
+            else:
+                post.toogleLike(self.user)
+                self.write(json.dumps({"message": "Success!"}))

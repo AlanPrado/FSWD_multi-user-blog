@@ -33,6 +33,7 @@ class User(db.Model):
 class Post(db.Model):
     subject = db.StringProperty(required=True)
     author = db.ReferenceProperty(User)
+    likes = db.ListProperty(db.Key)
     content = db.TextProperty(required=True)
     created = db.DateTimeProperty(auto_now_add=True)
     last_modified = db.DateTimeProperty(auto_now=True)
@@ -54,8 +55,24 @@ class Post(db.Model):
         post.put()
         return post
 
+    def user_liked(self, user_key):
+        if user_key in self.likes:
+            return True
+        else:
+            return False
+
+
+    def toogleLike(self, user):
+        user_key = user.key()
+
+        if self.user_liked(user_key):
+            self.likes.remove(user_key)
+        else:
+            self.likes.append(user_key)
+
+        self.put()
+
     def update(self, subject, content):
         self.subject = subject
         self.content = content
         self.put()
-        return self

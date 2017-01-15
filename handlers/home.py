@@ -1,6 +1,7 @@
 import json
 from common.database import Post
-from common.request import BlogHandler, Page
+from common.request import BlogHandler
+from common.request import Page
 
 class WelcomeHandler(BlogHandler):
     def render_post_form(self, error="", content="", subject=""):
@@ -121,5 +122,5 @@ class LikeHandler(WelcomeHandler):
                 self.response.set_status(401)
                 self.write("You can't like your own post.")
             else:
-                post.toogleLike(self.user)
+                post.toogle_like(self.user)
                 self.write(json.dumps({"message": "Success!"}))

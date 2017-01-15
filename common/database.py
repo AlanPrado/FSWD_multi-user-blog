@@ -12,12 +12,12 @@ class User(db.Model):
 
     @classmethod
     def by_name(cls, name):
-        u = cls.all().filter('name =', name).get()
-        return u
+        user = cls.all().filter('name =', name).get()
+        return user
 
     @classmethod
-    def register(cls, name, pw, email=None):
-        pw_hash = secure.make_pw_hash(name, pw)
+    def register(cls, name, pwd, email=None):
+        pw_hash = secure.make_pw_hash(name, pwd)
         user = cls(name=name,
                    pw_hash=pw_hash,
                    email=email)
@@ -25,10 +25,10 @@ class User(db.Model):
         return user
 
     @classmethod
-    def login(cls, name, pw):
-        u = cls.by_name(name)
-        if u and secure.valid_pw(name, pw, u.pw_hash):
-            return u
+    def login(cls, name, pwd):
+        user = cls.by_name(name)
+        if user and secure.valid_pw(name, pwd, user.pw_hash):
+            return user
 
 class Post(db.Model):
     subject = db.StringProperty(required=True)
@@ -62,7 +62,7 @@ class Post(db.Model):
             return False
 
 
-    def toogleLike(self, user):
+    def toogle_like(self, user):
         user_key = user.key()
 
         if self.user_liked(user_key):

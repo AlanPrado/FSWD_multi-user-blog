@@ -3,7 +3,8 @@ import webapp2
 from config import config
 from common import secure
 from common.database import User
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 
 def load_templates(path, template_dir):
     files = []

@@ -56,8 +56,8 @@ class SignUp(BlogHandler):
         if email and not self.EMAIL_RE.match(email):
             return "That's not a valid email."
 
-    def valid_verify(self, p1, p2):
-        if p1 != p2:
+    def valid_verify(self, pwd1, pwd2):
+        if pwd1 != pwd2:
             return "Your passwords didn't match."
 
     def verify_already_exists(self, username):
@@ -87,8 +87,8 @@ class SignUp(BlogHandler):
             self.redirect('/blog')
         else:
             self.render('signup.html',
-						username=username,
-						email=email,
+                        username=username,
+                        email=email,
                         user_error=user_error,
                         password_error=password_error,
                         verify_error=verify_error,

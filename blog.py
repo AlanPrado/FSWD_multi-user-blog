@@ -1,7 +1,11 @@
+"""
+    This is the main module.
+    It's responsible for setup global variables,
+    routes and associate them with its handlers.
+"""
 import common.request as request
 import webapp2
 from config import config
-from common.request import BlogHandler
 from handlers.home import EditPostHandler
 from handlers.home import LikeHandler
 from handlers.home import NewPostHandler
@@ -13,10 +17,10 @@ from handlers.login.login import SignOut
 
 config.jinja_env = request.load_templates(__file__,
                                           ['handlers/login/views', 'handlers/views'])
-BlogHandler.login_page = '/blog/signup'
+request.BlogHandler.login_page = '/blog/signup'
 
 app = webapp2.WSGIApplication([
-    (BlogHandler.login_page, SignUp),
+    (request.BlogHandler.login_page, SignUp),
     ('/blog/signin', SignIn),
     ('/blog/logout', SignOut),
     (r'/blog/?', WelcomeHandler),

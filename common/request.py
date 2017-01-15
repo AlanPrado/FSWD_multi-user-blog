@@ -53,14 +53,11 @@ class BlogHandler(webapp2.RequestHandler):
         """ write a http response """
         self.response.write(*a, **kw)
 
-    def render_str(self, template, **params):
-        """ render a template to http response """
-        page = config.jinja_env.get_template(template)
-        return page.render(params)
-
     def render(self, template, **kw):
         """ render a template to http response """
-        self.write(self.render_str(template, **kw))
+        page = config.jinja_env.get_template(template)
+        response = page.render(**kw)
+        self.write(response)
 
     def set_cookie(self, name, val, path="Path=/"):
         """ set a cookie keypair name/val """

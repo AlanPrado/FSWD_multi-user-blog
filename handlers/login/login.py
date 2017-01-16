@@ -25,7 +25,9 @@ class SignIn(BlogHandler):
             self.login(user)
             self.redirect('/blog')
         else:
-            self.render('signin.html', user_error=user_error, password_error=password_error)
+            self.render('signin.html',
+                        user_error=user_error,
+                        password_error=password_error)
 
     def get(self):
         """ render /GET /blog/sign """
@@ -45,7 +47,8 @@ class SignIn(BlogHandler):
             password_error = "Password is required"
 
         if user_error or password_error:
-            self.render_signin(user_error=user_error, password_error=password_error)
+            self.render_signin(user_error=user_error,
+                               password_error=password_error)
         else:
             user = User.login(username, password)
             if not user:

@@ -66,7 +66,8 @@ class BlogHandler(webapp2.RequestHandler):
 
     def read_cookie(self, name):
         """ read a cookie """
-        return hasattr(self.request, 'cookies') and self.request.cookies.get(name)
+        cookies = hasattr(self.request, 'cookies')
+        return cookies and self.request.cookies.get(name)
 
     def set_secure_cookie(self, name, val):
         """

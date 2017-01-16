@@ -1,3 +1,6 @@
+"""
+    Secure helper features.
+"""
 import random
 import string
 import hmac

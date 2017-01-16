@@ -15,8 +15,10 @@ from handlers.login.login import SignIn
 from handlers.login.login import SignUp
 from handlers.login.login import SignOut
 
-config.jinja_env = request.load_templates(__file__,
-                                          ['handlers/login/views', 'handlers/views'])
+config.jinja_env = request.load_templates(
+    __file__,
+    ['handlers/login/views', 'handlers/views']
+)
 request.BlogHandler.login_page = '/blog/signup'
 
 app = webapp2.WSGIApplication([

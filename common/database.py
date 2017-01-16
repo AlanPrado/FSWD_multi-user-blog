@@ -1,7 +1,14 @@
+"""
+    This module contains database
+    models, queries and others
+    database operations.
+"""
 from common import secure
 from google.appengine.ext import db
 
 class User(db.Model):
+    """ Defines a user model """
+
     name = db.StringProperty(required=True)
     pw_hash = db.StringProperty(required=True)
     email = db.StringProperty()
@@ -31,6 +38,8 @@ class User(db.Model):
             return user
 
 class Post(db.Model):
+    """ Defines a post model """
+
     subject = db.StringProperty(required=True)
     author = db.ReferenceProperty(User)
     likes = db.ListProperty(db.Key)
@@ -40,7 +49,10 @@ class Post(db.Model):
 
     @classmethod
     def get_most_recent(cls):
-        #return db.GqlQuery("SELECT * FROM %s ORDER BY created DESC LIMIT 10" % cls.__name__)
+        #return db.GqlQuery(
+        #    "SELECT * FROM %s ORDER BY created DESC LIMIT 10"
+        #    % cls.__name__
+        #)
         return cls.all().order("-created").run(limit=10)
 
     @classmethod
@@ -56,11 +68,7 @@ class Post(db.Model):
         return post
 
     def user_liked(self, user_key):
-        if user_key in self.likes:
-            return True
-        else:
-            return False
-
+        return bool(user_key in self.likes)
 
     def toogle_like(self, user):
         user_key = user.key()

@@ -1,7 +1,8 @@
 """
     This module manages the blog features.
     Allow users creates/edit/remove posts.
-    Allow users creates/edit/remove comments from a post.
+    Allow users creates/edit/remove comments
+    from a post.
     Allow users like/unlike posts.
 """
 import json
@@ -14,7 +15,11 @@ class WelcomeHandler(BlogHandler):
 
     def render_post_form(self, error="", content="", subject=""):
         """ Render form to create/edit posts. """
-        self.render('post_form.html', page=self, error=error, subject=subject, content=content)
+        self.render('post_form.html',
+                    page=self,
+                    error=error,
+                    subject=subject,
+                    content=content)
 
     def get_page_stack(self):
         """
@@ -68,13 +73,17 @@ class NewPostHandler(WelcomeHandler):
             content = self.request.POST['content']
 
             if subject and content:
-                post = Post.register(subject=subject, content=content, author=self.user)
+                post = Post.register(subject=subject,
+                                     content=content,
+                                     author=self.user)
                 post_id = post.key().id()
                 post_url = "/blog/%s" % post_id
                 self.redirect(post_url, permanent=True)
             else:
                 error = 'subject and content, please!'
-                self.render_post_form(error=error, subject=subject, content=content)
+                self.render_post_form(error=error,
+                                      subject=subject,
+                                      content=content)
 
 class EditPostHandler(WelcomeHandler):
     """ Edit a existing post. """
@@ -85,7 +94,8 @@ class EditPostHandler(WelcomeHandler):
             Used to create a navigation component.
         """
         pages = super(EditPostHandler, self).get_page_stack()
-        pages.append(Page(label='Edit Post', url='/blog/edit/%s' % self.post_id))
+        pages.append(Page(label='Edit Post',
+                          url='/blog/edit/%s' % self.post_id))
         return pages
 
     def get(self, post_id):
@@ -102,7 +112,8 @@ class EditPostHandler(WelcomeHandler):
             if not post:
                 self.redirect("/blog", permanent=True)
             else:
-                self.render_post_form(subject=post.subject, content=post.content)
+                self.render_post_form(subject=post.subject,
+                                      content=post.content)
 
     def post(self, post_id):
         """
@@ -119,14 +130,18 @@ class EditPostHandler(WelcomeHandler):
                 self.redirect("/blog", permanent=True)
             elif not (subject and content):
                 error = 'subject and content, please!'
-                self.render_post_form(error=error, subject=subject, content=content)
+                self.render_post_form(error=error,
+                                      subject=subject,
+                                      content=content)
             else:
                 self.post_id = post_id
                 post = Post.by_id(int(post_id))
 
                 if not self.is_owner(post):
                     error = 'Edit other people posts is not allowed.'
-                    self.render_post_form(error=error, subject=subject, content=content)
+                    self.render_post_form(error=error,
+                                          subject=subject,
+                                          content=content)
                 else:
                     post.update(subject=subject, content=content)
                     post_url = "/blog/%s" % post_id

@@ -1,1 +1,14 @@
-<p>Comments</p>
+<h4>{{post.comments_number()}} Comments</h4>
+
+<div class="form-vertical">
+  <form action="/blog/{{post.key().id()}}/comment" method="post">
+    <div class="form-group">
+      <label>
+        <span>Comment</span>
+        <textarea name="content" rows="8" cols="80" class="form-control"></textarea>
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+  </form>
+</div>

@@ -9,9 +9,9 @@ from google.appengine.ext import db
 class User(db.Model):
     """ Defines a user model """
 
+    email = db.StringProperty()
     name = db.StringProperty(required=True)
     pw_hash = db.StringProperty(required=True)
-    email = db.StringProperty()
 
     @classmethod
     def by_id(cls, uid):
@@ -37,15 +37,35 @@ class User(db.Model):
         if user and secure.valid_pw(name, pwd, user.pw_hash):
             return user
 
-class Post(db.Model):
-    """ Defines a post model """
+class Comment(db.Model):
+    """ Defines a comment model """
 
-    subject = db.StringProperty(required=True)
     author = db.ReferenceProperty(User)
-    likes = db.ListProperty(db.Key)
     content = db.TextProperty(required=True)
     created = db.DateTimeProperty(auto_now_add=True)
     last_modified = db.DateTimeProperty(auto_now=True)
+
+    def update_comment(self, content):
+        self.content = content
+        self.put()
+
+    @classmethod
+    def register(cls, content, author):
+        post = cls(content=content,
+                   author=author)
+        post.put()
+        return post
+
+class Post(db.Model):
+    """ Defines a post model """
+
+    author = db.ReferenceProperty(User)
+    comments = db.ListProperty(db.Key)
+    content = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
+    last_modified = db.DateTimeProperty(auto_now=True)
+    likes = db.ListProperty(db.Key)
+    subject = db.StringProperty(required=True)
 
     @classmethod
     def get_most_recent(cls):
@@ -67,6 +87,11 @@ class Post(db.Model):
         post.put()
         return post
 
+    @classmethod
+    def add_comment(cls, comment):
+        cls.comments.append(comment)
+        cls.put()
+
     def user_liked(self, user_key):
         return bool(user_key in self.likes)
 
@@ -84,3 +109,9 @@ class Post(db.Model):
         self.subject = subject
         self.content = content
         self.put()
+
+    def likes_number(self):
+        return len(self.likes)
+
+    def comments_number(self):
+        return len(self.comments)

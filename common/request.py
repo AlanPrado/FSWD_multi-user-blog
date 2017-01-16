@@ -49,6 +49,12 @@ class BlogHandler(webapp2.RequestHandler):
     """
     login_page = "login"
 
+    def __init__(self, request, response):
+        """ add the logged in user """
+        self.initialize(request, response)
+        uid = self.read_secure_cookie('user_id')
+        self.user = uid and User.by_id(int(uid))
+
     def write(self, *a, **kw):
         """ write a http response """
         self.response.write(*a, **kw)
@@ -90,12 +96,6 @@ class BlogHandler(webapp2.RequestHandler):
     def logout(self):
         """ remove session cookie """
         self.set_cookie('user_id', '')
-
-    def initialize(self, *a, **kw):
-        """ add the logged in user """
-        webapp2.RequestHandler.initialize(self, *a, **kw)
-        uid = self.read_secure_cookie('user_id')
-        self.user = uid and User.by_id(int(uid))
 
     def get_page_stack(self):
         """

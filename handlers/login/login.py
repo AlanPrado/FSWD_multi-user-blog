@@ -104,7 +104,7 @@ class SignUp(BlogHandler):
         email_error = self.valid_email(email) or ''
 
         if not user_error:
-            user_error = self.verify_already_exists(username) or ''
+            user_error = verify_already_exists(username) or ''
 
         if not (user_error or password_error or verify_error or email_error):
             user = User.register(username, password, email)

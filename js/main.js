@@ -41,6 +41,8 @@ $(".post-detail").on("click", ".like", function () {
     type: 'POST',
     success: function (response) {
       el.toggleClass("active");
+      var likes = JSON.parse(response).message;
+      el.parent().find(".like_counter span").text(likes);
     },
     error: function (data) {
       showMessage("alert-danger", data.responseText);

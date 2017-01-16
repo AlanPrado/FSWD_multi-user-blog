@@ -13,6 +13,11 @@ from common.request import Page
 class WelcomeHandler(BlogHandler):
     """ List ten most recent posts. """
 
+    def __init__(self, request, response):
+        """ add post id """
+        super(WelcomeHandler, self).__init__(request, response)
+        self.post_id = None
+
     def render_post_form(self, error="", content="", subject=""):
         """ Render form to create/edit posts. """
         self.render('post_form.html',
@@ -200,4 +205,4 @@ class LikeHandler(WelcomeHandler):
                 self.write("You can't like your own post.")
             else:
                 post.toogle_like(self.user)
-                self.write(json.dumps({"message": "Success!"}))
+                self.write(json.dumps({"message": post.likes_number()}))

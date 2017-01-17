@@ -6,6 +6,7 @@
     Allow users like/unlike posts.
 """
 import json
+from common.database import Comment
 from common.database import Post
 from common.request import BlogHandler
 from common.request import Page
@@ -169,11 +170,18 @@ class PostHandler(WelcomeHandler):
         if self.is_user_authenticated():
             self.post_id = post_id
             post = Post.by_id(int(post_id))
+            comments = []
+
+            for comment in post.comments:
+                comments.append(Comment.by_id(comment.id()))
 
             if not post:
                 self.redirect("/blog", permanent=True)
             else:
-                self.render('blog_detail.html', page=self, post=post)
+                self.render('blog_detail.html',
+                            page=self,
+                            post=post,
+                            comments=comments)
 
     def delete(self, post_id):
         """ handle /DELETE /blog/<blog_id> operation """
@@ -206,3 +214,44 @@ class LikeHandler(WelcomeHandler):
             else:
                 post.toogle_like(self.user)
                 self.write(json.dumps({"message": post.likes_number()}))
+
+
+class CommentHandler(WelcomeHandler):
+
+    def is_comment_owner(self, comment):
+        """
+            return True if the user is the
+            owner of the comment, otherwise
+            returns false
+         """
+        return comment.author.key().id() == self.user.key().id()
+
+    def post(self, post_id):
+        if self.is_user_authenticated():
+            content = self.request.POST['content']
+            post = Post.by_id(int(post_id))
+
+            if not post:
+                self.response.set_status(401)
+                self.write("Post not found.")
+            elif not content:
+                self.response.set_status(401)
+                self.write("Empty comment is not allowed.")
+            else:
+                post.add_comment(content=content, author=self.user)
+                self.write(json.dumps({"message": "Comment added!"}))
+
+    def put(self, comment_id):
+        if self.is_user_authenticated():
+            content = self.request.PUT['content']
+            comment = Comment.by_id(int(comment_id))
+
+            if not comment:
+                self.response.set_status(401)
+                self.write("Comment not found.")
+            elif not self.is_comment_owner(comment):
+                self.response.set_status(401)
+                self.write("You can't change other peoples comments.")
+            else:
+                comment.update_comment(comment=content)
+                self.write(json.dumps({"message": "Comment updated!"}))

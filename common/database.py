@@ -45,16 +45,20 @@ class Comment(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     last_modified = db.DateTimeProperty(auto_now=True)
 
+    @classmethod
+    def by_id(cls, pid):
+        return cls.get_by_id(pid)
+
     def update_comment(self, content):
         self.content = content
         self.put()
 
     @classmethod
     def register(cls, content, author):
-        post = cls(content=content,
-                   author=author)
-        post.put()
-        return post
+        comment = cls(content=content,
+                      author=author.key())
+        comment.put()
+        return comment
 
 class Post(db.Model):
     """ Defines a post model """
@@ -87,10 +91,10 @@ class Post(db.Model):
         post.put()
         return post
 
-    @classmethod
-    def add_comment(cls, comment):
-        cls.comments.append(comment)
-        cls.put()
+    def add_comment(self, content, author):
+        comment = Comment.register(content=content, author=author)
+        self.comments.append(comment.key())
+        self.put()
 
     def user_liked(self, user_key):
         return bool(user_key in self.likes)

@@ -1,6 +1,23 @@
 <h4>{{post.comments_number()}} Comments</h4>
 
+<hr>
+{% for comment in comments %}
 <div class="form-vertical">
+  <form action="/blog/{{post.key().id()}}/comment/{{comment.key().id()}}" method="post">
+    <div class="form-group">
+      <label>
+        <span>{{comment.author.name}}</span>
+        <textarea name="content" rows="8" cols="80" class="form-control" readonly>{{comment.content}}</textarea>
+      </label>
+    </div>
+  </form>
+</div>
+{% if loop.last %}
+<hr>
+{% endif %}
+{% endfor %}
+
+<div class="form-vertical" id="add-comment">
   <form action="/blog/{{post.key().id()}}/comment" method="post">
     <div class="form-group">
       <label>

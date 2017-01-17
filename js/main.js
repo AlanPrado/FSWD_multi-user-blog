@@ -49,3 +49,24 @@ $(".post-detail").on("click", ".like", function () {
     }
   });
 });
+
+$("#add-comment").on("submit", "form", function (evt) {
+  evt.preventDefault();
+  $.ajax({
+    url: $(this).attr("action"),
+    data: $(this).serialize(),
+    context: this,
+    type: $(this).attr("method"),
+    success: function (response) {
+      var data = JSON.parse(response);
+      //$(this).find("[name=content]").val("");
+      showMessage("alert-success", data.message);
+      setTimeout(function () {
+        location.reload();
+      }, 3000);
+    },
+    error: function (data) {
+      showMessage("alert-danger", data.responseText);
+    }
+  });
+});

@@ -217,6 +217,7 @@ class LikeHandler(WelcomeHandler):
 
 
 class CommentHandler(WelcomeHandler):
+    """ Save and update comments """
 
     def is_comment_owner(self, comment):
         """

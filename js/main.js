@@ -12,6 +12,10 @@ function toggleProp(el, propName) {
   el.prop(propName, !el.prop(propName));
 }
 
+function cancelEditComment(textArea) {
+  textArea.val(textArea.data("original-value"));
+}
+
 function saveComment(reload) {
   $.ajax({
     url: this.attr("action"),
@@ -28,6 +32,7 @@ function saveComment(reload) {
       }
     },
     error: function (data) {
+      cancelEditComment(this.find("textarea"));
       showMessage("alert-danger", data.responseText);
     }
   });
@@ -87,7 +92,7 @@ $(".comment-header").on("click", ".comment-btn", function () {
   if(el.hasClass("edit")) {
     textArea.data("original-value", textArea.val());
   } else if (el.hasClass("cancel")) {
-    textArea.val(textArea.data("original-value"));
+    cancelEditComment(textArea);
   } else if (el.hasClass("confirm")) {
     saveComment.apply(el.closest("form"));
   }

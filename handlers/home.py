@@ -36,6 +36,8 @@ class WelcomeHandler(BlogHandler):
 
     def get(self):
         """ render /GET /blog """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see base class
         if self.is_user_authenticated():
             posts = Post.get_most_recent()
             self.render('welcome.html', page=self, posts=posts)
@@ -65,6 +67,8 @@ class NewPostHandler(WelcomeHandler):
             handle /GET /blog/<blog_id> operation
             and render post form
         """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             self.render_post_form()
 
@@ -74,6 +78,8 @@ class NewPostHandler(WelcomeHandler):
             and render post form if error,
             otherwise redirect to post detail
         """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             subject = self.request.POST['subject']
             content = self.request.POST['content']
@@ -111,6 +117,8 @@ class EditPostHandler(WelcomeHandler):
             post. If the post does not exist, redirect
             user to the post list (welcome page).
         """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             self.post_id = post_id
             post = Post.by_id(int(post_id))
@@ -127,6 +135,8 @@ class EditPostHandler(WelcomeHandler):
             and render post form if there is any error.
             Otherwise redirect to welcome page.
         """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             self.post_id = post_id
             subject = self.request.POST['subject']
@@ -167,17 +177,16 @@ class PostHandler(WelcomeHandler):
 
     def get(self, post_id):
         """ handle /GET /blog/<blog_id> operation """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             self.post_id = post_id
             post = Post.by_id(int(post_id))
-            comments = []
-
-            for comment in post.comments:
-                comments.append(Comment.by_id(comment.id()))
 
             if not post:
                 self.redirect("/blog", permanent=True)
             else:
+                comments = Comment.find_by_keys(post.comments)
                 self.render('blog_detail.html',
                             page=self,
                             post=post,
@@ -185,6 +194,8 @@ class PostHandler(WelcomeHandler):
 
     def delete(self, post_id):
         """ handle /DELETE /blog/<blog_id> operation """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             post = Post.by_id(int(post_id))
 
@@ -202,6 +213,8 @@ class LikeHandler(WelcomeHandler):
 
     def post(self, post_id):
         """ handle /POST /blog/<blog_id>/like operation """
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             post = Post.by_id(int(post_id))
 
@@ -228,6 +241,8 @@ class CommentHandler(WelcomeHandler):
         return comment.author.key().id() == self.user.key().id()
 
     def post(self, post_id):
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             content = self.request.POST['content']
             post = Post.by_id(int(post_id))
@@ -242,7 +257,9 @@ class CommentHandler(WelcomeHandler):
                 post.add_comment(content=content, author=self.user)
                 self.write(json.dumps({"message": "Comment added!"}))
 
-    def put(self, comment_id):
+    def put(self, post_id, comment_id):
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
         if self.is_user_authenticated():
             content = self.request.POST['content']
             comment = Comment.by_id(int(comment_id))
@@ -256,3 +273,19 @@ class CommentHandler(WelcomeHandler):
             else:
                 comment.update_comment(content=content)
                 self.write(json.dumps({"message": "Comment updated!"}))
+
+    def delete(self, post_id, comment_id):
+        # when is_user_authenticated method is false redirects
+        # to login page if false, see the implementation at BlogHandler
+        if self.is_user_authenticated():
+            comment = Comment.by_id(int(comment_id))
+
+            if not comment:
+                self.response.set_status(401)
+                self.write("Comment not found.")
+            elif not self.is_comment_owner(comment):
+                self.response.set_status(401)
+                self.write("You can't remove other peoples comments.")
+            else:
+                comment.remove(int(post_id))
+                self.write(json.dumps({"message": "Comment removed!"}))

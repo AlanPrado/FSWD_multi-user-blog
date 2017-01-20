@@ -49,6 +49,22 @@ class Comment(db.Model):
     def by_id(cls, pid):
         return cls.get_by_id(pid)
 
+    def remove(self, post_id):
+        post = Post.by_id(post_id)
+        post.comments.remove(self.key())
+        post.put()
+        self.delete()
+
+    @classmethod
+    def find_by_keys(cls, comments_keys):
+        if comments_keys:
+            q = cls.all()
+            q.filter("__key__ IN ", comments_keys)
+            comments = q.run(limit=10)
+            return comments
+        else:
+            return []
+
     def update_comment(self, content):
         self.content = content
         self.put()

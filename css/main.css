@@ -81,12 +81,12 @@
   background: #efe;
 }
 
-.edit {
+.edit, .remove {
   background-color: #33bb7c;
   color: white;
 }
 
-.edit:hover {
+.edit:hover, .remove:hover {
   color: #44cc8d;
 }
 

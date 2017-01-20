@@ -1,11 +1,35 @@
 function showMessage(alertClass, message) {
   var notification = $("#notification");
   notification.find(".alert")
-              .removeClass(["alert-success", "alert-danger"])
+              .removeClass("alert-success alert-danger")
               .find(".message").text(message).end()
               .find(".status").text(alertClass === "alert-success" ? "Success!" : "Error:").end()
               .addClass(alertClass).removeClass("hide");
   notification.modal("show");
+}
+
+function reload() {
+  setTimeout(function () {
+    location.reload();
+  }, 3000);
+}
+
+function editComment(form) {
+  request(form.attr("action"), "PUT", form.serialize())
+  .fail(function () {
+    cancelEditComment(form.find("textarea"));
+  });
+}
+
+function removeComment(form) {
+  request(form.attr("action"), "DELETE")
+        .then(function () {
+          form.remove();
+          reload();
+        })
+        .fail(function () {
+          cancelEditComment(form.find("textarea"));
+        });
 }
 
 function toggleProp(el, propName) {
@@ -16,26 +40,26 @@ function cancelEditComment(textArea) {
   textArea.val(textArea.data("original-value"));
 }
 
-function saveComment(reload) {
+//TODO: consider using options
+function request(url, method, data, hideSM, hideEM) {
+  var defer = $.Deferred();
+
   $.ajax({
-    url: this.attr("action"),
-    data: this.serialize(),
-    context: this,
-    type: this.attr("method"),
+    url: url,
+    data: data,
+    type: method,
     success: function (response) {
       var data = JSON.parse(response);
-      showMessage("alert-success", data.message);
-      if(reload) {
-        setTimeout(function () {
-          location.reload();
-        }, 3000);
-      }
+      defer.resolve(data);
+      if(!hideSM) showMessage("alert-success", data.message);
     },
     error: function (data) {
-      cancelEditComment(this.find("textarea"));
-      showMessage("alert-danger", data.responseText);
+      defer.reject(data);
+      if(!hideEM) showMessage("alert-danger", data.responseText);
     }
   });
+
+  return defer;
 }
 
 $("#delete-post").on("submit", "form", function (ev) {
@@ -44,61 +68,59 @@ $("#delete-post").on("submit", "form", function (ev) {
     var $btn = modal.find("button").button('loading');
     var post_id = modal.find("input[name=post_id]").val();
 
-    $.ajax({
-      url: '/blog/' + post_id,
-      type: 'DELETE',
-      success: function (response) {
-        var data = JSON.parse(response);
-        showMessage("alert-success", data.message);
-        $(".detail").remove();
-      },
-      error: function (data) {
-        showMessage("alert-danger", data.responseText);
-      },
-      complete: function () {
-        modal.closest("#delete-post").modal("hide");
-        $btn.button("reset");
-      }
+    request('/blog/' + post_id, "DELETE")
+    .then(function (data) {
+      showMessage("alert-success", data.message);
+      $(".detail").remove();
+    })
+    .done(function () {
+      modal.closest("#delete-post").modal("hide");
+      $btn.button("reset");
     });
 });
 
 $(".post-detail").on("click", ".like", function () {
-  var el = $(this);
-  var url = el.data("url");
+  var self = $(this);
+  var url = self.data("url");
 
-  $.ajax({
-    url: url,
-    type: 'POST',
-    success: function (response) {
-      el.toggleClass("active");
-      var likes = JSON.parse(response).message;
-      el.parent().find(".like_counter span").text(likes);
-    },
-    error: function (data) {
-      showMessage("alert-danger", data.responseText);
-    }
+  request(url, "POST", "", true).then(function (data) {
+    self.parent().find(".like_counter span").text(data.message);
+    self.toggleClass("active");
   });
 });
 
 $("#add-comment").on("submit", "form", function (evt) {
   evt.preventDefault();
-  saveComment.apply($(this), [true]);
+  var self = $(this);
+  request(self.attr("action"), "POST", self.serialize())
+    .then(reload);
 });
 
 $(".comment-header").on("click", ".comment-btn", function () {
   var el = $(this);
   var textArea = el.closest("form").find("textarea");
 
-  if(el.hasClass("edit")) {
+  var isEdit = el.hasClass("edit");
+  var isRemove = el.hasClass("remove");
+
+  if(isEdit || isRemove) {
     textArea.data("original-value", textArea.val());
+    textArea.data("edit", isEdit);
+    textArea.data("remove", isRemove);
   } else if (el.hasClass("cancel")) {
     cancelEditComment(textArea);
   } else if (el.hasClass("confirm")) {
-    saveComment.apply(el.closest("form"));
+    var form = el.closest("form");
+    if(textArea.data("edit")) {
+      editComment(form);
+    } else if(textArea.data("remove")) {
+      removeComment(form);
+    }
   }
 
   //toggle edit and confirm buttons visibilty
   el.parent().find("span").toggleClass("hide");
   //add/remove readonly to textArea
-  toggleProp(textArea, "readonly");
+  if(!textArea.data("remove"))
+    toggleProp(textArea, "readonly");
 });

@@ -3,7 +3,7 @@
 <hr>
 {% for comment in comments %}
 <div class="form-vertical">
-  <form action="/blog/comment/{{comment.key().id()}}" method="put">
+  <form action="/blog/{{post.key().id()}}/comment/{{comment.key().id()}}" method="put">
     <div class="form-group">
       <label>
         <div class="comment-header">
@@ -13,6 +13,7 @@
           </div>
           <div class="edit-comment">
             <span class="comment-btn edit glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            <span class="comment-btn remove glyphicon glyphicon-remove" aria-hidden="true"></span>
             <span class="comment-btn confirm glyphicon glyphicon-ok hide" aria-hidden="true"></span>
             <span class="comment-btn cancel glyphicon glyphicon-remove hide" aria-hidden="true"></span>
           </div>

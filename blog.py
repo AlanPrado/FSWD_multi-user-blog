@@ -20,11 +20,11 @@ config.jinja_env = request.load_templates(
     __file__,
     ['handlers/login/views', 'handlers/views']
 )
-request.BlogHandler.login_page = '/blog/signup'
+request.BlogHandler.login_page = '/blog/signin'
 
 app = webapp2.WSGIApplication([
-    (request.BlogHandler.login_page, SignUp),
-    ('/blog/signin', SignIn),
+    ('/blog/signup', SignUp),
+    (request.BlogHandler.login_page, SignIn),
     ('/blog/logout', SignOut),
     (r'/blog/?', WelcomeHandler),
     (r'/?', WelcomeHandler),
@@ -41,7 +41,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route(r'/blog/<post_id:\d+>/comment',
                   CommentHandler,
                   name='comment'),
-    webapp2.Route(r'/blog/comment/<comment_id:\d+>',
+    webapp2.Route(r'/blog/<post_id:\d+>/comment/<comment_id:\d+>',
                   CommentHandler,
                   name='edit_comment')
 ], debug=True)

@@ -41,7 +41,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route(r'/blog/<post_id:\d+>/comment',
                   CommentHandler,
                   name='comment'),
-    webapp2.Route(r'/blog/comment/<commend_id:\d+>',
+    webapp2.Route(r'/blog/comment/<comment_id:\d+>',
                   CommentHandler,
                   name='edit_comment')
 ], debug=True)

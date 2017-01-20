@@ -3,10 +3,20 @@
 <hr>
 {% for comment in comments %}
 <div class="form-vertical">
-  <form action="/blog/{{post.key().id()}}/comment/{{comment.key().id()}}" method="post">
+  <form action="/blog/comment/{{comment.key().id()}}" method="put">
     <div class="form-group">
       <label>
-        <span>{{comment.author.name}}</span>
+        <div class="comment-header">
+          <div class="comment-title">
+            <div class="comment-author">{{comment.author.name}}</div>
+            <div class="date">{{comment.created.strftime("%b %d, %Y")}}</div>
+          </div>
+          <div class="edit-comment">
+            <span class="comment-btn edit glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            <span class="comment-btn confirm glyphicon glyphicon-ok hide" aria-hidden="true"></span>
+            <span class="comment-btn cancel glyphicon glyphicon-remove hide" aria-hidden="true"></span>
+          </div>
+        </div>
         <textarea name="content" rows="8" cols="80" class="form-control" readonly>{{comment.content}}</textarea>
       </label>
     </div>

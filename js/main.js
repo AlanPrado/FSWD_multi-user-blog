@@ -8,6 +8,31 @@ function showMessage(alertClass, message) {
   notification.modal("show");
 }
 
+function toggleProp(el, propName) {
+  el.prop(propName, !el.prop(propName));
+}
+
+function saveComment(reload) {
+  $.ajax({
+    url: this.attr("action"),
+    data: this.serialize(),
+    context: this,
+    type: this.attr("method"),
+    success: function (response) {
+      var data = JSON.parse(response);
+      showMessage("alert-success", data.message);
+      if(reload) {
+        setTimeout(function () {
+          location.reload();
+        }, 3000);
+      }
+    },
+    error: function (data) {
+      showMessage("alert-danger", data.responseText);
+    }
+  });
+}
+
 $("#delete-post").on("submit", "form", function (ev) {
     ev.preventDefault();
     var modal = $(this);
@@ -52,21 +77,23 @@ $(".post-detail").on("click", ".like", function () {
 
 $("#add-comment").on("submit", "form", function (evt) {
   evt.preventDefault();
-  $.ajax({
-    url: $(this).attr("action"),
-    data: $(this).serialize(),
-    context: this,
-    type: $(this).attr("method"),
-    success: function (response) {
-      var data = JSON.parse(response);
-      //$(this).find("[name=content]").val("");
-      showMessage("alert-success", data.message);
-      setTimeout(function () {
-        location.reload();
-      }, 3000);
-    },
-    error: function (data) {
-      showMessage("alert-danger", data.responseText);
-    }
-  });
+  saveComment.apply($(this), [true]);
+});
+
+$(".comment-header").on("click", ".comment-btn", function () {
+  var el = $(this);
+  var textArea = el.closest("form").find("textarea");
+
+  if(el.hasClass("edit")) {
+    textArea.data("original-value", textArea.val());
+  } else if (el.hasClass("cancel")) {
+    textArea.val(textArea.data("original-value"));
+  } else if (el.hasClass("confirm")) {
+    saveComment.apply(el.closest("form"));
+  }
+
+  //toggle edit and confirm buttons visibilty
+  el.parent().find("span").toggleClass("hide");
+  //add/remove readonly to textArea
+  toggleProp(textArea, "readonly");
 });

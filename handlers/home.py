@@ -243,7 +243,7 @@ class CommentHandler(WelcomeHandler):
 
     def put(self, comment_id):
         if self.is_user_authenticated():
-            content = self.request.PUT['content']
+            content = self.request.POST['content']
             comment = Comment.by_id(int(comment_id))
 
             if not comment:
@@ -253,5 +253,5 @@ class CommentHandler(WelcomeHandler):
                 self.response.set_status(401)
                 self.write("You can't change other peoples comments.")
             else:
-                comment.update_comment(comment=content)
+                comment.update_comment(content=content)
                 self.write(json.dumps({"message": "Comment updated!"}))

@@ -1,4 +1,4 @@
-#Project: Multi User Blog
+# Project: Multi User Blog
 
 Multi User Blog demo site.
 
